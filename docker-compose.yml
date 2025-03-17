@@ -1,11 +1,29 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  web:
+  fastapi-app:
     build: .
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
+    depends_on:
+      - mongodb
     environment:
-      - ENV=production
+      - MONGO_URI=mongodb://mongodb:27017 # 使用 MongoDB 容器的名稱作為主機
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27018:27017"  # 修改為 27018:27017，將主機端口 27018 映射到容器內的 27017 端口
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mynetwork
+
+volumes:
+  mongodb_data:
+
+networks:
+  mynetwork:
+    driver: bridge

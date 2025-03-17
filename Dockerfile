@@ -1,17 +1,17 @@
-# Use an official Python runtime as a base image
-FROM python:3.10
+# 使用官方 Python 基礎映像
+FROM python:3.11
 
-# Set the working directory in the container
+# 設置工作目錄
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY requirements.txt .
+# 複製當前目錄的內容到容器內的 /app 資料夾
+COPY . /app
 
-# Install the required packages
+# 安裝依賴項
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5011 available to the world outside this container
-COPY . .
+# 暴露應用運行的端口
+EXPOSE 5000
 
-# Run app.py when the container launches
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+# 啟動 FastAPI 應用
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "5000"]
